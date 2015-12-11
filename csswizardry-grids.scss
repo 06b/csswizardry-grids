@@ -88,6 +88,13 @@ $gutter:                24px !default;
 
 
 /**
+ * ‘.grid‘ classes already taken on a page? Use this setting to namespace the output
+ * classes. For example, set this to ‘foo-‘ to get ‘.foo-grid‘, ‘.foo-grid__item‘, etc.
+ */
+$namespace:    ""!default;
+
+
+/**
  * Would you like Sass’ silent classes, or regular CSS classes?
  */
 $use-silent-classes:    false !default;
@@ -112,7 +119,7 @@ $pull:                  false !default;
  * github.com/csswizardry/csswizardry-grids/commit/744d4b23c9d2b77d605b5991e54a397df72e0688
  * github.com/csswizardry/inuit.css/issues/170#issuecomment-14859371
  */
-$use-markup-fix:        true !default;
+$use-markup-fix:        false !default;
 
 
 /**
@@ -121,10 +128,10 @@ $use-markup-fix:        true !default;
  * that the breakpoint fires at.
  */
 $breakpoints: (
-    'palm' '(max-width: 480px)',
-    'lap' '(min-width: 481px) and (max-width: 1023px)',
-    'portable' '(max-width: 1023px)',
-    'desk' '(min-width: 1024px)'
+    'phone-landscape' '(min-width: 30em)' '(max-width: 40em)',
+    'tablet-portrait' '(min-width: 40em)' '(max-width: 64em)',
+    'tablet-landscape' '(min-width: 64em)' '(max-width: 80em)',
+    'desktop' '(min-width: 80em)' '',
 ) !default;
 
 
@@ -138,16 +145,16 @@ $breakpoints: (
  * Push and pull shall only be used if `$push` and/or `$pull` and `$responsive`
  * have been set to ‘true’.
  */
-$breakpoint-has-widths: ('palm', 'lap', 'portable', 'desk') !default;
-$breakpoint-has-push:   ('palm', 'lap', 'portable', 'desk') !default;
-$breakpoint-has-pull:   ('palm', 'lap', 'portable', 'desk') !default;
+$breakpoint-has-widths: ('phone-landscape', 'tablet-portrait', 'tablet-landscape', 'desktop') !default;
+$breakpoint-has-push:   ('phone-landscape', 'tablet-portrait', 'tablet-landscape', 'desktop') !default;
+$breakpoint-has-pull:   ('phone-landscape', 'tablet-portrait', 'tablet-landscape', 'desktop') !default;
 
 
 /**
  * You do not need to edit anything from this line onward; csswizardry-grids is
  * good to go. Happy griddin’!
  */
-$class-type: if($use-silent-classes, unquote("%"), unquote("."));
+$class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 
 
 
@@ -175,6 +182,31 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
             @media only screen and #{$declaration} {
                 @content;
             }
+        }
+    }
+
+    @if not $breakpoint-found {
+        @warn "Breakpoint ‘#{$media-query}’ does not exist";
+    }
+}
+
+
+@mixin max-grid-media-query($media-query) {
+    $breakpoint-found: false;
+
+    @each $breakpoint in $breakpoints {
+        $name: nth($breakpoint, 1);
+        $declaration: nth($breakpoint, 2);
+	      $maxdeclaration: nth($breakpoint, 3);
+
+        @if $media-query == $name and $declaration and $maxdeclaration {
+            $breakpoint-found: true;
+
+        @if $maxdeclaration != '' {
+            @media only screen and #{$declaration} and #{$maxdeclaration} {
+                @content;
+            }
+          }
         }
     }
 
@@ -232,7 +264,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
      * 4. Full-width unless told to behave otherwise.
      * 5. Required to combine fluid widths and fixed gutters.
      */
-    #{$class-type}grid__item {
+    #{$class-type}grid-column {
         display:inline-block;           /* [1] */
         padding-left:$gutter;           /* [2] */
         vertical-align:top;             /* [3] */
@@ -253,11 +285,11 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
  * Reversed grids allow you to structure your source in the opposite order to
  * how your rendered layout will appear. Extends `.grid`.
  */
-#{$class-type}grid--rev {
+#{$class-type}grid--reverse {
     direction:rtl;
     text-align:left;
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         direction:ltr;
         text-align:left;
     }
@@ -271,7 +303,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
 #{$class-type}grid--full {
     margin-left:0;
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         padding-left:0;
     }
 }
@@ -283,7 +315,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
 #{$class-type}grid--right {
     text-align:right;
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         text-align:left;
     }
 }
@@ -296,7 +328,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
 #{$class-type}grid--center {
     text-align:center;
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         text-align:left;
     }
 }
@@ -308,14 +340,14 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
  */
 #{$class-type}grid--middle {
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         vertical-align:middle;
     }
 }
 
 #{$class-type}grid--bottom {
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         vertical-align:bottom;
     }
 }
@@ -327,7 +359,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
 #{$class-type}grid--narrow {
     margin-left:-($gutter / 2);
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         padding-left:$gutter / 2;
     }
 }
@@ -339,7 +371,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
 #{$class-type}grid--wide {
     margin-left:-($gutter * 2);
 
-    > #{$class-type}grid__item {
+    > #{$class-type}grid-column {
         padding-left:$gutter * 2;
     }
 }
@@ -404,6 +436,17 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
 
 
     /**
+     * Sevenths
+     */
+    #{$prefix}one-seventh         { width:14.2857%; }
+    #{$prefix}two-sevenths        { width:28.5714%; }
+    #{$prefix}three-sevenths      { width:42.8571%; }
+    #{$prefix}four-sevenths       { width:57.1428%; }
+    #{$prefix}five-sevenths       { width:71.4285%; }
+    #{$prefix}six-sevenths        { width:85.7142%; }
+
+
+    /**
      * Eighths
      */
     #{$prefix}one-eighth        { width:12.5%; }
@@ -413,6 +456,19 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
     #{$prefix}five-eighths      { width:62.5%; }
     #{$prefix}six-eighths       { @extend #{$prefix}three-quarters; }
     #{$prefix}seven-eighths     { width:87.5%; }
+
+
+     /**
+     * Ninths
+     */
+    #{$prefix}one-ninth         { width:11.111%; }
+    #{$prefix}two-ninths        { width:22.222%; }
+    #{$prefix}three-ninths      { @extend #{$class-type}#{$namespace}one-third; }
+    #{$prefix}four-ninths       { width:44.444%; }
+    #{$prefix}five-ninths       { width:55.555%; }
+    #{$prefix}six-ninths        { @extend #{$class-type}#{$namespace}two-thirds; }
+    #{$prefix}seven-ninths      { width:77.777%; }
+    #{$prefix}eight-ninths      { width:88.888%; }
 
 
     /**
@@ -430,13 +486,28 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
 
 
     /**
+     * Elevenths
+     */
+    #{$prefix}one-eleventh       { width:9.0909%; }
+    #{$prefix}two-elevenths      { width:18.1818%; }
+    #{$prefix}three-elevenths    { width:27.2727%; }
+    #{$prefix}four-elevenths     { width:36.3636%; }
+    #{$prefix}five-elevenths     { width:45.4545%; }
+    #{$prefix}six-elevenths      { width:54.5454%; }
+    #{$prefix}seven-elevenths    { width:63.6363%; }
+    #{$prefix}eight-elevenths    { width:72.7272%; }
+    #{$prefix}nine-elevenths     { width:81.8181%; }
+    #{$prefix}ten-elevenths      { width:90.9090%; }
+
+
+    /**
      * Twelfths
      */
     #{$prefix}one-twelfth       { width:8.333%; }
     #{$prefix}two-twelfths      { @extend #{$prefix}one-sixth; }
     #{$prefix}three-twelfths    { @extend #{$prefix}one-quarter; }
     #{$prefix}four-twelfths     { @extend #{$prefix}one-third; }
-    #{$prefix}five-twelfths     { width:41.666% }
+    #{$prefix}five-twelfths     { width:41.666%; }
     #{$prefix}six-twelfths      { @extend #{$prefix}one-half; }
     #{$prefix}seven-twelfths    { width:58.333%; }
     #{$prefix}eight-twelfths    { @extend #{$prefix}two-thirds; }
@@ -463,6 +534,38 @@ $class-type: if($use-silent-classes, unquote("%"), unquote("."));
         }
     }
 
+}
+
+
+/**
+ * Visually Hidden classes
+ */
+@mixin visuallyhidden() {
+    border:0!important;
+    clip:rect(0 0 0 0)!important;
+    height:1px!important;
+    margin:-1px!important;
+    overflow:hidden!important;
+    padding:0!important;
+    position: absolute!important;
+    width:1px!important;
+}
+
+@each $state in $breakpoint-has-widths{
+  
+    @include grid-media-query(#{$state}){
+        .hide--#{$state}-up{
+            @include visuallyhidden();
+        }
+    }
+    
+    @include max-grid-media-query(#{$state}){
+        .hide--#{$state}-only{
+            @include visuallyhidden();
+        }
+    
+    }
+    
 }
 
 
