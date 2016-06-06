@@ -266,7 +266,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
  * 1. Handle letter-spacing hack within csswizardary-grids
  * 2. Handle word-spacing hack for Opera within csswizardary-grids
  */
-.grid > * { letter-spacing: 0 /* 1 */; word-spacing: 0 /* 2 */; }
+#{$class-type}grid > * { letter-spacing: 0 /* 1 */; word-spacing: 0 /* 2 */; }
 
 
     /**
