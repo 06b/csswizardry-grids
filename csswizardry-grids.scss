@@ -276,7 +276,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
      * 4. Full-width unless told to behave otherwise.
      * 5. Required to combine fluid widths and fixed gutters.
      */
-    #{$class-type}grid-column {
+    #{$class-type}grid__column {
         display:inline-block;           /* [1] */
         padding-left:$gutter;           /* [2] */
         vertical-align:top;             /* [3] */
@@ -301,7 +301,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
     direction:rtl;
     text-align:left;
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         direction:ltr;
         text-align:left;
     }
@@ -315,7 +315,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 #{$class-type}grid--full {
     margin-left:0;
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         padding-left:0;
     }
 }
@@ -327,7 +327,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 #{$class-type}grid--right {
     text-align:right;
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         text-align:left;
     }
 }
@@ -340,7 +340,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 #{$class-type}grid--center {
     text-align:center;
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         text-align:left;
     }
 }
@@ -352,14 +352,14 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
  */
 #{$class-type}grid--middle {
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         vertical-align:middle;
     }
 }
 
 #{$class-type}grid--bottom {
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         vertical-align:bottom;
     }
 }
@@ -371,7 +371,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 #{$class-type}grid--narrow {
     margin-left:-($gutter / 2);
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         padding-left:$gutter / 2;
     }
 }
@@ -383,7 +383,7 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 #{$class-type}grid--wide {
     margin-left:-($gutter * 2);
 
-    > #{$class-type}grid-column {
+    > #{$class-type}grid__column {
         padding-left:$gutter * 2;
     }
 }
