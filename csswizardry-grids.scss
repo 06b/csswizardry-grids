@@ -307,6 +307,22 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
     }
 }
 
+@if $responsive {
+
+    @each $name in $breakpoint-has-widths {
+
+        #{$class-type}grid--reverse--#{$name} {
+            direction:rtl;
+            text-align:left;
+        
+            > #{$class-type}grid__column {
+                direction:ltr;
+                text-align:left;
+            }
+        }
+    }
+}
+
 
 /**
  * Gutterless grids have all the properties of regular grids, minus any spacing.
@@ -317,6 +333,19 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 
     > #{$class-type}grid__column {
         padding-left:0;
+    }
+}
+
+@if $responsive {
+
+    @each $name in $breakpoint-has-widths {
+        #{$class-type}grid--full--#{$name} {
+            margin-left:0;
+        
+            > #{$class-type}grid__column {
+                padding-left:0;
+            }
+        }
     }
 }
 
@@ -332,6 +361,19 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
     }
 }
 
+@if $responsive {
+
+    @each $name in $breakpoint-has-widths {
+        #{$class-type}grid--right--#{$name} {
+            text-align:right;
+        
+            > #{$class-type}grid__column {
+                text-align:left;
+            }
+        }
+    }
+}
+
 
 /**
  * Centered grids align grid items centrally without needing to use push or pull
@@ -342,6 +384,19 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 
     > #{$class-type}grid__column {
         text-align:left;
+    }
+}
+
+@if $responsive {
+
+    @each $name in $breakpoint-has-widths {
+        #{$class-type}grid--center--#{$name} {
+            text-align:center;
+        
+            > #{$class-type}grid__column {
+                text-align:left;
+            }
+        }
     }
 }
 
@@ -364,6 +419,25 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
     }
 }
 
+@if $responsive {
+
+    @each $name in $breakpoint-has-widths {
+        #{$class-type}grid--middle--#{$name} {
+        
+            > #{$class-type}grid__column {
+                vertical-align:middle;
+            }
+        }
+        
+        #{$class-type}grid--bottom--#{$name} {
+        
+            > #{$class-type}grid__column {
+                vertical-align:bottom;
+            }
+        }
+    }
+}
+
 
 /**
  * Create grids with narrower gutters. Extends `.grid`.
@@ -373,6 +447,19 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
 
     > #{$class-type}grid__column {
         padding-left:$gutter / 2;
+    }
+}
+
+@if $responsive {
+
+    @each $name in $breakpoint-has-widths {
+        #{$class-type}grid--narrow--#{$name} {
+            margin-left:-($gutter / 2);
+        
+            > #{$class-type}grid__column {
+                padding-left:$gutter / 2;
+            }
+        }
     }
 }
 
@@ -388,8 +475,19 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
     }
 }
 
+@if $responsive {
 
-
+    @each $name in $breakpoint-has-widths {
+        #{$class-type}grid--wide--#{$name} {
+            margin-left:-($gutter * 2);
+        
+            > #{$class-type}grid__column {
+                padding-left:$gutter * 2;
+            }
+        }
+        
+    }
+}
 
 
 /*------------------------------------*\
