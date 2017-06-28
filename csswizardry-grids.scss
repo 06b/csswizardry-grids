@@ -106,11 +106,6 @@ $use-silent-classes:    false !default;
 $push:                  false !default;
 $pull:                  false !default;
 
-/**
- * Do you want to include visually-hidden classes?
- */
-$visually-hidden:       false !default;
-
 
 /**
  * Using `inline-block` means that the grid items need their whitespace removing
@@ -187,31 +182,6 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
             @media only screen and #{$declaration} {
                 @content;
             }
-        }
-    }
-
-    @if not $breakpoint-found {
-        @warn "Breakpoint ‘#{$media-query}’ does not exist";
-    }
-}
-
-
-@mixin max-grid-media-query($media-query) {
-    $breakpoint-found: false;
-
-    @each $breakpoint in $breakpoints {
-        $name: nth($breakpoint, 1);
-        $declaration: nth($breakpoint, 2);
-          $maxdeclaration: nth($breakpoint, 3);
-
-        @if $media-query == $name and $declaration and $maxdeclaration {
-            $breakpoint-found: true;
-
-        @if $maxdeclaration != '' {
-            @media only screen and #{$declaration} and #{$maxdeclaration} {
-                @content;
-            }
-          }
         }
     }
 
@@ -644,39 +614,6 @@ $class-type: if($use-silent-classes, unquote("%"), unquote(".") + $namespace);
         }
     }
 
-}
-
-    /**
-    * Visually Hidden classes
-    */
-    @mixin visuallyhidden() {
-        border:0!important;
-        clip:rect(0 0 0 0)!important;
-        height:1px!important;
-        margin:-1px!important;
-        overflow:hidden!important;
-        padding:0!important;
-        position: absolute!important;
-        width:1px!important;
-    }
-
-@if $visually-hidden {
-    @each $state in $breakpoint-has-widths{
-
-        @include grid-media-query(#{$state}){
-            .hide--#{$state}-up{
-                @include visuallyhidden();
-            }
-        }
-
-        @include max-grid-media-query(#{$state}){
-            .hide--#{$state}-only{
-                @include visuallyhidden();
-            }
-
-        }
-
-    }
 }
 
 
