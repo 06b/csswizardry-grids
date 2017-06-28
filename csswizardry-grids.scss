@@ -128,10 +128,10 @@ $use-markup-fix:        false !default;
  * that the breakpoint fires at.
  */
 $breakpoints: (
-    'phone-landscape' '(min-width: 30em)' '(max-width: 40em)',
-    'tablet-portrait' '(min-width: 40em)' '(max-width: 64em)',
-    'tablet-landscape' '(min-width: 64em)' '(max-width: 80em)',
-    'desktop' '(min-width: 80em)' '',
+    'phone-landscape' '(min-width: 30em) and (max-width: 40em)',
+    'tablet-portrait' '(min-width: 40em) and (max-width: 64em)',
+    'tablet-landscape' '(min-width: 64em) and (max-width: 80em)',
+    'desktop' '(min-width: 80em)',
 ) !default;
 
 
